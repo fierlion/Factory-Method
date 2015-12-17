@@ -31,7 +31,7 @@ class RentalCar {
         default:
             carImpl = nil
         }
-        return carImpl!.createRentalCar(passengers)
+        return carImpl?.createRentalCar(passengers)
     }
 }
 

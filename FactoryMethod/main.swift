@@ -8,9 +8,9 @@
 
 import Foundation
 
-let passengers = [1,3,5]
+let passengers = [1,3,5,10]
 
 for p in passengers {
-    print("\(p) passengers: \(RentalCar.createRentalCar(p)!.name)")
+    print("\(p) passengers: \(RentalCar.createRentalCar(p)?.name)")
 }
 
