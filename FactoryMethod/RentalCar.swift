@@ -6,26 +6,67 @@
 //  Copyright © 2015 fierlion. All rights reserved.
 //
 
-protocol RentalCar {
-    var name:String { get }
-    var passengers:Int { get }
-    var pricePerDay:Float { get }
-}
-
-class Compact:RentalCar {
-    var name = "VW Golf"
-    var passengers = 3
-    var pricePerDay:Float = 20
-}
-
-class Sports:RentalCar {
-    var name = "Porsche"
-    var passengers = 1
-    var pricePerDay:Float = 100
+class RentalCar {
+    private var nameBV:String
+    private var passengersBV:Int
+    private var priceBV:Float
+    
+    private init(name:String, passengers:Int, price:Float) {
+        self.nameBV = name
+        self.passengersBV = passengers
+        self.priceBV = price
+    }
+    
+    final var name:String {get{return nameBV}}
+    final var passengers:Int {get{return passengersBV}}
+    final var pricePerDay:Float {get{return priceBV}}
+    
+    class func createRentalCar(passengers:Int) -> RentalCar? {
+        var carImpl:RentalCar.Type?
+        switch (passengers) {
+        case 0...3:
+            carImpl = Compact.self
+        case 4...8:
+            carImpl = SUV.self
+        default:
+            carImpl = nil
+        }
+        return carImpl!.createRentalCar(passengers)
+    }
 }
 
 class SUV:RentalCar {
-    var name = "Cadillac Escalade"
-    var passengers = 8
-    var pricePerDay:Float = 75
+    private init() {
+        super.init(name: "Cadillac Escalade", passengers:8, price: 75.0)
+    }
+    
+    override class func createRentalCar(passengers:Int) -> RentalCar? {
+        return SUV()
+    }
+}
+
+
+class Compact:RentalCar {
+    private convenience init() {
+        self.init(name: "VW Golf", passengers: 3, price: 20.0)
+    }
+    
+    private override init(name:String, passengers:Int, price:Float) {
+        super.init(name:name, passengers:passengers, price:price)
+    }
+    
+    override class func createRentalCar(passengers:Int) -> RentalCar? {
+        if (passengers < 2) {
+            return Compact()
+        }
+        else {
+            return SmallCompact()
+        }
+    }
+    
+    class SmallCompact:Compact {
+        private init() {
+            super.init(name:"Ford Fiesta", passengers:3, price: 15.0)
+        }
+    }
 }
